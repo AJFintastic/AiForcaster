@@ -2,6 +2,3 @@ streamlit
 pandas
 streamlit-option-menu
 supabase
-supabase-client
-aiohttp
-setuptools
