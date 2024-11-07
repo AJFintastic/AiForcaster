@@ -1,11 +1,10 @@
-
 from supabase_client import get_supabase_client
 
 supabase = get_supabase_client()
 
 def register_user(email, password, role="user"):
     try:
-        # Sign up the user without needing email verification
+        # Sign up the user
         response = supabase.auth.sign_up({
             "email": email,
             "password": password
@@ -16,14 +15,26 @@ def register_user(email, password, role="user"):
         if user:
             # Insert user details into the users table
             user_id = user.id
-            supabase.table('users').insert({
+            insert_response = supabase.table('users').insert({
                 "id": user_id,
                 "email": email,
                 "role": role
             }).execute()
-            return {"success": True, "message": "User registered successfully!"}
-        else:
-            return {"success": False, "message": "Failed to register user."}
+
+            # Check if the insert operation was successful by verifying the `data` attribute
+            if insert_response and hasattr(insert_response, 'data') and insert_response.data:
+                # Automatically log in the user
+                return {
+                    "success": True,
+                    "message": "User registered and logged in successfully!",
+                    "user": user,
+                    "role": role
+                }
+            else:
+                print(f"User insertion failed: {insert_response}")
+                return {"success": False, "message": "Failed to register user in database."}
+
+        return {"success": False, "message": "Failed to register user."}
     except Exception as e:
         print(f"Error: {e}")
         return {"success": False, "message": str(e)}
