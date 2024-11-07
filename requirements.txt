@@ -5,7 +5,6 @@ supabase
 numpy
 scikit-learn
 tensorflow
-io
 matplotlib
 prophet
 statsmodels
