@@ -2,7 +2,6 @@ streamlit
 pandas
 streamlit-option-menu
 supabase
-supabase-client
 numpy
 scikit-learn
 tensorflow
